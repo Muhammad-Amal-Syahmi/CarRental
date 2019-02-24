@@ -38,7 +38,7 @@ namespace CarRental.Controllers
             IQueryable<Car> qrySearch;
             if (Search != null)
                 qrySearch = from car in dbContext.Cars
-                            where car.CarModel.Contains(Search)
+                            where car.CarModel.ToLower().Contains(Search.ToLower())
                             select car;
             else
                 qrySearch = from car in dbContext.Cars
