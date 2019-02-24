@@ -35,7 +35,7 @@
                         <th scope="row">@item.Id</th>
                         <td class="Car"><a>@item.CarModel</a></td>
                         <td>@item.Location</td>
-                        <td>RM @item.PricePerDay</td>
+                        <td>RM @String.Format("{0:0.00}", item.PricePerDay)</td>
                     </tr>
                 }
         }
