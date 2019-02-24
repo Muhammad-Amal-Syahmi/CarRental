@@ -1,4 +1,7 @@
-﻿
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<DataAccess.DataModel.Car>
 @{
     ViewBag.Title = "Car";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -44,6 +47,20 @@
         }
     </tbody>
 </table>
+
+@Html.PagedListPager(Model,
+    page => Url.Action("Index",
+        new
+        {
+            page,
+            Search = Request.QueryString["Search"]
+        }
+        ),
+    new PagedListRenderOptions()
+    {
+        UlElementClasses= new [] {"pagination"},
+        LiElementClasses= new [] {"page-item", "page-link"}
+    })
 
 <button class="btn btn-primary">Test</button>
 

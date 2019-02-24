@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using DataAccess.DataModel;
+using PagedList;
 
 namespace CarRental.Controllers
 {
@@ -32,19 +33,19 @@ namespace CarRental.Controllers
         //}
 
         // Can we override ActionResult Index ?
-        public ActionResult Index(string Search)
+        public ActionResult Index(string Search, int? page)
         {
             IQueryable<Car> qrySearch;
-            //if (Search != null)
-            qrySearch = from car in dbContext.Cars
-                        where car.CarModel.Contains(Search)
-                        select car;
-            //else
-            //    qrySearch = from car in dbContext.Cars
-            //                orderby car.Id
-            //                select car;
+            if (Search != null)
+                qrySearch = from car in dbContext.Cars
+                            where car.CarModel.Contains(Search)
+                            select car;
+            else
+                qrySearch = from car in dbContext.Cars
+                            orderby car.Id
+                            select car;
 
-            return View(qrySearch);
+            return View(qrySearch.ToList().ToPagedList(page ?? 1, 3));
         }
 
         //public ActionResult Index()
