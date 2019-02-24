@@ -45,7 +45,7 @@ namespace CarRental.Controllers
                             orderby car.Id
                             select car;
 
-            return View(qrySearch.ToList().ToPagedList(page ?? 1, 3));
+            return View(qrySearch.ToList().ToPagedList(page ?? 1, 10));
         }
 
         //public ActionResult Index()
