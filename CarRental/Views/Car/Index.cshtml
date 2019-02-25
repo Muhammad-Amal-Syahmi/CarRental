@@ -11,20 +11,27 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-6">
+        <div class="col-10">
             @using (Html.BeginForm("Index", "Car", FormMethod.Get))
             {
-                <div class="form-group searchInput">
-                    @Html.TextBox("Search", null, new { @class = "form-control ", @placeholder = "Search Car Model..." })
+            <div class="row">
+                <div class="container body-content">
+                    @Html.RadioButton("SearchType", "CarModel", new { @checked = "checked" })
+                    Car Model
+                    @Html.RadioButton("SearchType", "Location")
+                    Location
                 </div>
-
+                <div class="form-group searchInput">
+                    @Html.TextBox("Search", null, new { @class = "form-control", @placeholder = "Search Car Model..." })
+                </div>
+                <div>
+                    <input type="submit" value="Search" class="btn btn-light" />
+                </div>
+            </div>
             }
         </div>
-        <div class="col-3">
-
-        </div>
-        <div class="col-3">
-            @Html.ActionLink("Add Car", "Add", "Car", new { area = "" }, new { @class = "btn btn-primary" })
+        <div class="col-2">
+            @Html.ActionLink("Add Car", "Add", "Car", new { area = "" }, new { @class = "btn btn-primary float-right" })
         </div>
     </div>
 </div>
@@ -36,6 +43,7 @@
             <th scope="col">Car Model</th>
             <th scope="col">Location</th>
             <th scope="col">Price per Day</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -47,19 +55,27 @@
                 if (count % 2 == 0)
                 {
                     <tr class="table-light">
-                        <th scope="row">@item.Id</th>
+                        <th scope="row" style="width: 7%">@item.Id</th>
                         <td class="Car"><a>@item.CarModel</a></td>
                         <td>@item.Location</td>
                         <td>RM @String.Format("{0:0.00}", item.PricePerDay)</td>
+                        <td style="width: 15%">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                        </td>
                     </tr>
                 }
                 else
                 {
                     <tr class="table-primary">
-                        <th scope="row">@item.Id</th>
+                        <th scope="row" style="width: 7%">@item.Id</th>
                         <td class="Car"><a>@item.CarModel</a></td>
                         <td>@item.Location</td>
                         <td>RM @String.Format("{0:0.00}", item.PricePerDay)</td>
+                        <td style="width: 15%">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                        </td>
                     </tr>
                 }
                 count++;
@@ -89,26 +105,4 @@
         LiElementClasses= new [] {"page-item", "page-link"}
     })
 </div>
-
-
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-@*<script>
-    $(document).ready(function () {
-        function Contains(text_one, text_two) {
-            if (text_one.indexOf(text_two) != -1)
-                return true;
-        }
-        $("#Search").keyup(function () {
-            var searchText = $("#Search").val().toLowerCase();
-            $(".Search").each(function () {
-                if (!Contains($(this).text().toLowerCase(), searchText)) {
-                    $(this).hide();
-                }
-                else {
-                    $(this).show();
-                }
-            });
-        });
-    });
-</script>*@
 
