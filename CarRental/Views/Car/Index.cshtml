@@ -9,13 +9,25 @@
 
 <h2>List of Cars</h2>
 
-@using (Html.BeginForm("Index", "Car", FormMethod.Get))
-{
-<div class="form-group">
-    @Html.TextBox("Search",null, new { @class="form-control", @placeholder="Search Car Model..."})
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            @using (Html.BeginForm("Index", "Car", FormMethod.Get))
+            {
+                <div class="form-group searchInput">
+                    @Html.TextBox("Search", null, new { @class = "form-control ", @placeholder = "Search Car Model..." })
+                </div>
+
+            }
+        </div>
+        <div class="col-3">
+
+        </div>
+        <div class="col-3">
+            @Html.ActionLink("Add Car", "Add", "Car", new { area = "" }, new { @class = "btn btn-primary" })
+        </div>
+    </div>
 </div>
-    
-}
 
 <table class="table table-hover table-bordered">
     <thead>
@@ -62,25 +74,25 @@
         }
     </tbody>
 </table>
-
-@Html.PagedListPager(Model,
+<div>
+    @Html.PagedListPager(Model,
     page => Url.Action("Index",
         new
         {
             page,
             Search = Request.QueryString["Search"]
         }
-        ),
+    ),
     new PagedListRenderOptions()
     {
         UlElementClasses= new [] {"pagination"},
         LiElementClasses= new [] {"page-item", "page-link"}
     })
+</div>
 
-<button class="btn btn-primary">Test</button>
 
-@*<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+@*<script>
     $(document).ready(function () {
         function Contains(text_one, text_two) {
             if (text_one.indexOf(text_two) != -1)

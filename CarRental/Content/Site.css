@@ -29,3 +29,13 @@ thead th {
     background-color: #3B8BEB;
     color: white;
 }
+
+.searchInput .input{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.page-item.active {
+    background-color: #3B8BEB;
+    color: #fff;
+}

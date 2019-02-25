@@ -48,9 +48,9 @@ namespace CarRental.Controllers
             return View(qrySearch.ToList().ToPagedList(page ?? 1, 10));
         }
 
-        //public ActionResult Index()
-        //{
-        //    return View(dbContext.Cars.ToList());
-        //}
+        public ActionResult Add()
+        {
+            return View();
+        }
     }
 }
