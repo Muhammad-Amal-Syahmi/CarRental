@@ -15,14 +15,11 @@
             @using (Html.BeginForm("Index", "Car", FormMethod.Get))
             {
             <div class="row">
-                <div class="container body-content">
-                    @Html.RadioButton("SearchType", "CarModel", new { @checked = "checked" })
-                    Car Model
-                    @Html.RadioButton("SearchType", "Location")
-                    Location
+                <div class="form-group searchInput">
+                    @Html.TextBox("SearchCarModel", null, new { @class = "form-control", @placeholder = "Search by Car Model..." })
                 </div>
                 <div class="form-group searchInput">
-                    @Html.TextBox("Search", null, new { @class = "form-control", @placeholder = "Search Car Model..." })
+                    @Html.TextBox("SearchLocation", null, new { @class = "form-control", @placeholder = "Search by Location..." })
                 </div>
                 <div>
                     <input type="submit" value="Search" class="btn btn-light" />
@@ -35,7 +32,6 @@
         </div>
     </div>
 </div>
-
 <table class="table table-hover table-bordered">
     <thead>
         <tr class="">
@@ -96,7 +92,8 @@
         new
         {
             page,
-            Search = Request.QueryString["Search"]
+            SearchCarModel = Request.QueryString["SearchCarModel"],
+            SearchLocation= Request.QueryString["SearchLocation"]
         }
     ),
     new PagedListRenderOptions()

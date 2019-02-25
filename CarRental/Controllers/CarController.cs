@@ -11,23 +11,30 @@ namespace CarRental.Controllers
     {
         private AWS_POSTGREQL_TRIALEntities dbContext = new AWS_POSTGREQL_TRIALEntities();
 
-        public ActionResult Index(string Search, string SearchType, int? page)
+        public ActionResult Index(string SearchCarModel, string SearchLocation, int? page)
         {
             IQueryable<Car> qrySearch;
-            if (Search != null)
+            if (SearchCarModel != null && SearchLocation != null)
             {
-                if (SearchType == "CarModel")
-                    qrySearch = from car in dbContext.Cars
-                                where car.CarModel.ToLower().Contains(Search.ToLower())
-                                orderby car.Id
-                                select car;
-                else
-                    qrySearch = from car in dbContext.Cars
-                                where car.Location.ToLower().Contains(Search.ToLower())
-                                orderby car.Id
-                                select car;
+                qrySearch = from car in dbContext.Cars
+                            where car.CarModel.ToLower().Contains(SearchCarModel.ToLower()) && car.Location.ToLower().Contains(SearchLocation.ToLower())
+                            orderby car.Id
+                            select car;
             }
-
+            else if (SearchCarModel == null && SearchLocation != null)
+            {
+                qrySearch = from car in dbContext.Cars
+                            where car.CarModel.ToLower().Contains(" ") && car.Location.ToLower().Contains(SearchLocation.ToLower())
+                            orderby car.Id
+                            select car;
+            }
+            else if (SearchCarModel != null && SearchLocation == null)
+            {
+                qrySearch = from car in dbContext.Cars
+                            where car.CarModel.ToLower().Contains(SearchCarModel.ToLower()) && car.Location.ToLower().Contains(" ")
+                            orderby car.Id
+                            select car;
+            }
             else
                 qrySearch = from car in dbContext.Cars
                             orderby car.Id
