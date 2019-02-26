@@ -1,7 +1,7 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
+using Business;
 using DataAccess.DataModel;
 using PagedList;
 
@@ -9,70 +9,47 @@ namespace CarRental.Controllers
 {
     public class CarController : Controller
     {
-        private AWS_POSTGREQL_TRIALEntities dbContext = new AWS_POSTGREQL_TRIALEntities();
+        CarBusiness carBusiness = new CarBusiness();
 
+        // GET: Car/?page=&SearchCarModel=&SearchCarLocation
         public ActionResult Index(string SearchCarModel, string SearchLocation, int? page)
         {
-            IQueryable<Car> qrySearch;
-            if (SearchCarModel != null && SearchLocation != null)
-            {
-                qrySearch = from car in dbContext.Cars
-                            where car.CarModel.ToLower().Contains(SearchCarModel.ToLower()) && car.Location.ToLower().Contains(SearchLocation.ToLower())
-                            orderby car.Id
-                            select car;
-            }
-            else if (SearchCarModel == null && SearchLocation != null)
-            {
-                qrySearch = from car in dbContext.Cars
-                            where car.CarModel.ToLower().Contains(" ") && car.Location.ToLower().Contains(SearchLocation.ToLower())
-                            orderby car.Id
-                            select car;
-            }
-            else if (SearchCarModel != null && SearchLocation == null)
-            {
-                qrySearch = from car in dbContext.Cars
-                            where car.CarModel.ToLower().Contains(SearchCarModel.ToLower()) && car.Location.ToLower().Contains(" ")
-                            orderby car.Id
-                            select car;
-            }
-            else
-                qrySearch = from car in dbContext.Cars
-                            orderby car.Id
-                            select car;
+            List<Car> ListOfCars = carBusiness.SearchCar(SearchCarModel, SearchLocation);
 
-            return View(qrySearch.ToList().ToPagedList(page ?? 1, 10));
+            return View(ListOfCars.ToPagedList(page ?? 1, 10));
         }
 
+        // GET: Car/Add
         public ActionResult Add()
         {
-
             return View();
         }
 
+        // POST: Car/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add([Bind(Include = "Id,CarModel,Location,PricePerDay")] Car car)
         {
             if (ModelState.IsValid)
             {
-                int max = dbContext.Cars.Max(p => p.Id);
-                car.Id = max + 1;
-                dbContext.Cars.Add(car);
-                dbContext.SaveChanges();
+                carBusiness.AddCar(car);
+
                 return RedirectToAction("Index");
             }
 
             return View(car);
         }
 
-        // GET: Cars/Edit/5
+        // GET: Car/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = dbContext.Cars.Find(id);
+
+            Car car = carBusiness.FindCar(id);
+
             if (car == null)
             {
                 return HttpNotFound();
@@ -80,28 +57,28 @@ namespace CarRental.Controllers
             return View(car);
         }
 
-        // POST: Cars/Edit/5
+        // POST: Car/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,CarModel,Location,PricePerDay")] Car car)
         {
             if (ModelState.IsValid)
             {
-                dbContext.Entry(car).State = EntityState.Modified;
-                dbContext.SaveChanges();
+                carBusiness.EditCarDetails(car);
+
                 return RedirectToAction("Index");
             }
             return View(car);
         }
 
-        // GET: Cars/Delete/5
+        // GET: Car/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = dbContext.Cars.Find(id);
+            Car car = carBusiness.FindCar(id);
             if (car == null)
             {
                 return HttpNotFound();
@@ -109,14 +86,13 @@ namespace CarRental.Controllers
             return View(car);
         }
 
-        // POST: Cars/Delete/5
+        // POST: Car/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Car car = dbContext.Cars.Find(id);
-            dbContext.Cars.Remove(car);
-            dbContext.SaveChanges();
+            carBusiness.DeleteCar(id);
+
             return RedirectToAction("Index");
         }
     }

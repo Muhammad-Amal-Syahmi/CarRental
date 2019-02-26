@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental", "CarRental\CarR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7BABD772-4361-40C5-9672-0F8607E84855}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{A6B52EA1-3B24-472B-93D6-CFAE49013B58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7BABD772-4361-40C5-9672-0F8607E84855}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BABD772-4361-40C5-9672-0F8607E84855}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BABD772-4361-40C5-9672-0F8607E84855}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B52EA1-3B24-472B-93D6-CFAE49013B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B52EA1-3B24-472B-93D6-CFAE49013B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B52EA1-3B24-472B-93D6-CFAE49013B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B52EA1-3B24-472B-93D6-CFAE49013B58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
