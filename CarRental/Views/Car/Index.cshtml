@@ -7,24 +7,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>List of Cars</h2>
+<div class="card-title">
+    <h2>List of Cars</h2>
+</div>
 
 <div class="container">
     <div class="row">
         <div class="col-10">
             @using (Html.BeginForm("Index", "Car", FormMethod.Get))
             {
-            <div class="row">
-                <div class="form-group searchInput">
-                    @Html.TextBox("SearchCarModel", null, new { @class = "form-control", @placeholder = "Search by Car Model..." })
+                <div class="row">
+                    <div class="form-group search-input">
+                        @Html.TextBox("SearchLocation", null, new { @class = "form-control", @placeholder = "Pickup location" })
+                    </div>
+                    <div class="form-group search-input">
+                        @Html.TextBox("SearchCarModel", null, new { @class = "form-control", @placeholder = "Car Model" })
+                    </div>
+                    <div>
+                        <input type="submit" value="Search" class="btn btn-outline-light" />
+                    </div>
                 </div>
-                <div class="form-group searchInput">
-                    @Html.TextBox("SearchLocation", null, new { @class = "form-control", @placeholder = "Search by Location..." })
-                </div>
-                <div>
-                    <input type="submit" value="Search" class="btn btn-info" />
-                </div>
-            </div>
             }
         </div>
         <div class="col-2">
@@ -32,6 +34,7 @@
         </div>
     </div>
 </div>
+
 <table class="table table-hover table-bordered">
     <thead>
         <tr class="">
@@ -39,7 +42,7 @@
             <th scope="col">Car Model</th>
             <th scope="col">Location</th>
             <th scope="col">Price per Day</th>
-            <th></th>
+            <th scope="col">Options</th>
         </tr>
     </thead>
     <tbody>
@@ -86,20 +89,22 @@
         }
     </tbody>
 </table>
+
 <div>
     @Html.PagedListPager(Model,
-    page => Url.Action("Index",
-        new
-        {
-            page,
-            SearchCarModel = Request.QueryString["SearchCarModel"],
-            SearchLocation= Request.QueryString["SearchLocation"]
-        }
-    ),
-    new PagedListRenderOptions()
-    {
-        UlElementClasses= new [] {"pagination"},
-        LiElementClasses= new [] {"page-item", "page-link"}
-    })
+        page => Url.Action("Index",
+            new
+            {
+                page,
+                SearchCarModel = Request.QueryString["SearchCarModel"],
+                SearchLocation= Request.QueryString["SearchLocation"]
+            }
+        ),
+            new PagedListRenderOptions()
+            {
+                UlElementClasses= new [] {"pagination"},
+                LiElementClasses= new [] {"page-item", "page-link"}
+            }
+        )
 </div>
 

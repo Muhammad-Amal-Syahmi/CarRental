@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,8 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
+<body class="background">
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         @Html.ActionLink("Car Rental", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,12 +28,14 @@
 
     <div class="container body-content">
         @RenderBody()
+
+    </div>
+    <div class="footer">
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Car Rental by Amal Syahmi</p>
+            <p>&copy; @DateTime.Now.Year - Car Rental</p>
         </footer>
     </div>
-
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

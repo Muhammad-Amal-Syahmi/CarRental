@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Business;
 using DataAccess.DataModel;
@@ -9,12 +10,19 @@ namespace CarRental.Controllers
 {
     public class CarController : Controller
     {
-        CarBusiness carBusiness = new CarBusiness();
+        AWS_POSTGREQL_TRIALEntities dbContext;
+        CarBusiness carBusiness;
 
-        // GET: Car/?page=&SearchCarModel=&SearchCarLocation
-        public ActionResult Index(string SearchCarModel, string SearchLocation, int? page)
+        public CarController()
         {
-            List<Car> ListOfCars = carBusiness.SearchCar(SearchCarModel, SearchLocation);
+            dbContext = new AWS_POSTGREQL_TRIALEntities();
+            carBusiness = new CarBusiness();
+        }
+
+        // GET: Car/
+        public async Task<ActionResult> Index(string SearchCarModel, string SearchLocation, int? page)
+        {
+            List<Car> ListOfCars = await carBusiness.SearchCar(SearchCarModel, SearchLocation);
 
             return View(ListOfCars.ToPagedList(page ?? 1, 10));
         }
@@ -28,11 +36,11 @@ namespace CarRental.Controllers
         // POST: Car/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add([Bind(Include = "Id,CarModel,Location,PricePerDay")] Car car)
+        public async Task<ActionResult> Add([Bind(Include = "Id,CarModel,Location,PricePerDay")] Car car)
         {
             if (ModelState.IsValid)
             {
-                carBusiness.AddCar(car);
+                await carBusiness.AddCar(car);
 
                 return RedirectToAction("Index");
             }
@@ -41,14 +49,15 @@ namespace CarRental.Controllers
         }
 
         // GET: Car/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Car car = carBusiness.FindCar(id);
+            //Car car = carBusiness.FindCar(id);
+            Car car = await carBusiness.FindCar(id);
 
             if (car == null)
             {
@@ -60,11 +69,11 @@ namespace CarRental.Controllers
         // POST: Car/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,CarModel,Location,PricePerDay")] Car car)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,CarModel,Location,PricePerDay")] Car car)
         {
             if (ModelState.IsValid)
             {
-                carBusiness.EditCarDetails(car);
+                await carBusiness.EditCarDetails(car);
 
                 return RedirectToAction("Index");
             }
@@ -72,13 +81,14 @@ namespace CarRental.Controllers
         }
 
         // GET: Car/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = carBusiness.FindCar(id);
+            //Car car = carBusiness.FindCar(id);
+            Car car = await carBusiness.FindCar(id);
             if (car == null)
             {
                 return HttpNotFound();
@@ -89,9 +99,9 @@ namespace CarRental.Controllers
         // POST: Car/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            carBusiness.DeleteCar(id);
+            await carBusiness.DeleteCar(id);
 
             return RedirectToAction("Index");
         }

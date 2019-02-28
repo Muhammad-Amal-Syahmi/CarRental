@@ -1,71 +1,59 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using DataAccess.DataModel;
 
 namespace Business
 {
-    public class CarBusiness
+    public class CarBusiness : ICarBusiness
     {
-        private AWS_POSTGREQL_TRIALEntities dbContext = new AWS_POSTGREQL_TRIALEntities();
-        public List<Car> SearchCar(string CarModel, string Location)
+        AWS_POSTGREQL_TRIALEntities dbContext = new AWS_POSTGREQL_TRIALEntities();
+        public async Task<List<Car>> SearchCar(string CarModel, string Location)
         {
             IQueryable<Car> qrySearch;
-            if (CarModel != null && Location != null)
+            if (CarModel == null)
             {
-                //LINQ Lamda(Method) Syntax
-                qrySearch = from car in dbContext.Cars
-                            where car.CarModel.ToLower().Contains(CarModel.ToLower()) && car.Location.ToLower().Contains(Location.ToLower())
-                            orderby car.Id
-                            select car;
+                CarModel = "";
             }
-            else if (CarModel == null && Location != null)
+            if (Location == null)
             {
-                qrySearch = from car in dbContext.Cars
-                            where car.CarModel.ToLower().Contains(" ") && car.Location.ToLower().Contains(Location.ToLower())
-                            orderby car.Id
-                            select car;
+                Location = "";
             }
-            else if (CarModel != null && Location == null)
-            {
-                qrySearch = from car in dbContext.Cars
-                            where car.CarModel.ToLower().Contains(CarModel.ToLower()) && car.Location.ToLower().Contains(" ")
-                            orderby car.Id
-                            select car;
-            }
-            else
-                qrySearch = from car in dbContext.Cars
-                            orderby car.Id
-                            select car;
 
-            return qrySearch.ToList();
+            qrySearch = from car in dbContext.Cars
+                        where car.CarModel.ToLower().Contains(CarModel.ToLower()) && car.Location.ToLower().Contains(Location.ToLower())
+                        orderby car.Id
+                        select car;
+
+            return await qrySearch.ToListAsync();
         }
 
-        public void AddCar(Car NewCar)
+        public async Task AddCar(Car NewCar)
         {
             //LINQ Query(Comprehension) Syntax
-            int max = dbContext.Cars.Max(p => p.Id);
+            int max = await dbContext.Cars.MaxAsync(p => p.Id);
             NewCar.Id = max + 1;
             dbContext.Cars.Add(NewCar);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public Car FindCar(int? id)
+        public async Task<Car> FindCar(int? id)
         {
-            return dbContext.Cars.Find(id);
+            return await dbContext.Cars.FindAsync(id);
         }
 
-        public void EditCarDetails(Car car)
+        public async Task EditCarDetails(Car car)
         {
             dbContext.Entry(car).State = EntityState.Modified;
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public void DeleteCar(int id)
+        public async Task DeleteCar(int id)
         {
-            Car car = dbContext.Cars.Find(id);
+            Car car = await dbContext.Cars.FindAsync(id);
             dbContext.Cars.Remove(car);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
     }
 }

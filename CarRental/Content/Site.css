@@ -1,5 +1,9 @@
 ﻿body {
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("Assets/cars.jpg") no-repeat center center fixed;
+    background-size: cover;
+    opacity: .95;
+    color: #fff;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -21,17 +25,44 @@ textarea {
     max-width: 280px;
 }
 
+.jumbotron{
+    color: #000;
+}
+
+.card-title h2 {
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
 thead th {
     background-color: #3B8BEB;
     color: white;
 }
-
-.searchInput .input{
-    padding-top: 10px;
-    padding-bottom: 10px;
+.search-input{
+    padding-right:10px;
 }
 
 .page-item.active {
     background-color: #3B8BEB;
     color: #fff;
 }
+
+.navbar-brand{
+    font-weight: 700;
+    font-size:25px;
+    padding-right: 20px;
+    padding-left:20px;
+}
+
+.nav-item {
+    padding-right: 10px;
+}
+
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    width: 100%;
+    padding:5px 20px;
+    margin-top:20px;
+}
+
