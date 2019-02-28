@@ -10,19 +10,21 @@ namespace CarRental.Controllers
 {
     public class CarController : Controller
     {
-        AWS_POSTGREQL_TRIALEntities dbContext;
-        CarBusiness carBusiness;
-
+        private readonly ICarBusiness _carBusiness;
         public CarController()
         {
-            dbContext = new AWS_POSTGREQL_TRIALEntities();
-            carBusiness = new CarBusiness();
+            _carBusiness = new CarBusiness();
         }
+
+        //public CarController(ICarBusiness carBusiness)
+        //{
+        //    _carBusiness = carBusiness;
+        //}
 
         // GET: Car/
         public async Task<ActionResult> Index(string SearchCarModel, string SearchLocation, int? page)
         {
-            List<Car> ListOfCars = await carBusiness.SearchCar(SearchCarModel, SearchLocation);
+            var ListOfCars = await _carBusiness.SearchCar(SearchCarModel, SearchLocation);
 
             return View(ListOfCars.ToPagedList(page ?? 1, 10));
         }
@@ -40,7 +42,7 @@ namespace CarRental.Controllers
         {
             if (ModelState.IsValid)
             {
-                await carBusiness.AddCar(car);
+                await _carBusiness.AddCar(car);
 
                 return RedirectToAction("Index");
             }
@@ -57,7 +59,7 @@ namespace CarRental.Controllers
             }
 
             //Car car = carBusiness.FindCar(id);
-            Car car = await carBusiness.FindCar(id);
+            Car car = await _carBusiness.FindCar(id);
 
             if (car == null)
             {
@@ -73,7 +75,7 @@ namespace CarRental.Controllers
         {
             if (ModelState.IsValid)
             {
-                await carBusiness.EditCarDetails(car);
+                await _carBusiness.EditCarDetails(car);
 
                 return RedirectToAction("Index");
             }
@@ -88,7 +90,7 @@ namespace CarRental.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Car car = carBusiness.FindCar(id);
-            Car car = await carBusiness.FindCar(id);
+            Car car = await _carBusiness.FindCar(id);
             if (car == null)
             {
                 return HttpNotFound();
@@ -101,7 +103,7 @@ namespace CarRental.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            await carBusiness.DeleteCar(id);
+            await _carBusiness.DeleteCar(id);
 
             return RedirectToAction("Index");
         }
