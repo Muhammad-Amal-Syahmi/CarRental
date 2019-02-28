@@ -21,7 +21,7 @@ namespace CarRental.Controllers
         {
             var ListOfCars = await _carBusiness.SearchCar(SearchCarModel, SearchLocation);
 
-            return View( ListOfCars.ToPagedList(page ?? 1, 10));
+            return View(ListOfCars.ToPagedList(page ?? 1, 10));
         }
 
         // GET: Car/Add

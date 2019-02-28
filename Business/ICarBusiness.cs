@@ -10,6 +10,6 @@ namespace Business
         Task DeleteCar(int id);
         Task EditCarDetails(Car car);
         Task<Car> FindCar(int? id);
-        Task<List<Car>> SearchCar(string CarModel, string Location);
+        Task<IEnumerable<Car>> SearchCar(string CarModel, string Location);
     }
 }

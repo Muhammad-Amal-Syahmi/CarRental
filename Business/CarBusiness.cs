@@ -8,36 +8,46 @@ namespace Business
 {
     public class CarBusiness : ICarBusiness
     {
-        //AWS_POSTGREQL_TRIALEntities dbContext = new AWS_POSTGREQL_TRIALEntities();
         private readonly AWS_POSTGREQL_TRIALEntities _dbContext;
-        
+
         public CarBusiness(AWS_POSTGREQL_TRIALEntities dbContext)
         {
             _dbContext = dbContext;
         }
-        public async Task<List<Car>> SearchCar(string CarModel, string Location)
+
+        public async Task<IEnumerable<Car>> SearchCar(string carModel, string location)
         {
             IQueryable<Car> qrySearch;
-            if (CarModel == null)
+            if (carModel == null)
             {
-                CarModel = "";
+                carModel = "";
             }
-            if (Location == null)
+            if (location == null)
             {
-                Location = "";
+                location = "";
             }
 
-            qrySearch = from car in _dbContext.Cars
-                        where car.CarModel.ToLower().Contains(CarModel.ToLower()) && car.Location.ToLower().Contains(Location.ToLower())
-                        orderby car.Id
-                        select car;
+            // Query syntax
+            //qrySearch = from car in _dbContext.Cars
+            //            where car.CarModel.ToLower().Contains(carModel.ToLower()) && car.Location.ToLower().Contains(location.ToLower())
+            //            orderby car.Id
+            //            select car;
+
+            // Lamda syntax
+            qrySearch = _dbContext.Cars
+                .Where(c =>
+                    c.CarModel.ToLower().Contains(carModel.ToLower())
+                    &&
+                    c.Location.ToLower().Contains(location.ToLower())
+                 )
+                .OrderBy(c => c.Id)
+                .Select(c => c);
 
             return await qrySearch.ToListAsync();
         }
 
         public async Task AddCar(Car NewCar)
         {
-            //LINQ Query(Comprehension) Syntax
             int max = await _dbContext.Cars.MaxAsync(p => p.Id);
             NewCar.Id = max + 1;
             _dbContext.Cars.Add(NewCar);
