@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Business;
@@ -11,22 +10,18 @@ namespace CarRental.Controllers
     public class CarController : Controller
     {
         private readonly ICarBusiness _carBusiness;
-        public CarController()
-        {
-            _carBusiness = new CarBusiness();
-        }
 
-        //public CarController(ICarBusiness carBusiness)
-        //{
-        //    _carBusiness = carBusiness;
-        //}
+        public CarController(ICarBusiness carBusiness)
+        {
+            _carBusiness = carBusiness;
+        }
 
         // GET: Car/
         public async Task<ActionResult> Index(string SearchCarModel, string SearchLocation, int? page)
         {
             var ListOfCars = await _carBusiness.SearchCar(SearchCarModel, SearchLocation);
 
-            return View(ListOfCars.ToPagedList(page ?? 1, 10));
+            return View( ListOfCars.ToPagedList(page ?? 1, 10));
         }
 
         // GET: Car/Add
